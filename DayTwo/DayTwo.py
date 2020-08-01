@@ -1,26 +1,31 @@
 def readFile():
-    global code
+    global intcode
     file = open("DayTwoInput.txt", "r")
-    code = file.read()
-    code = code.split(",")
+    intcode = file.read()
+    intcode = intcode.split(",")
+    intcode = [int(i) for i in intcode]
     file.close
 
 def execute(x):
-    if int(code[x]) == 1: #add
-        result = int(code[x+1]) + int(code[x+2])
-        code[x+3] = result
-        execute(x+4)
-    elif int(code[x]) == 2: #multiply
-        result = int(code[x+1]) * int(code[x+2])
-        code[x+3] = result
-        execute(x+4)
-    elif int(code[x]) == 99: #end
-        print(code[0])
+    op = intcode[x]
+    loc_one = intcode[x+1]
+    loc_two = intcode[x+2]
+    dest = intcode[x+3]
 
-    
+    if intcode[x] != 99:
+        if intcode[x] == 1: #add
+            intcode[dest] = intcode[loc_one] + intcode[loc_two]
+            execute(x+4)
+        elif intcode[x] == 2: #multiply
+            intcode[dest] = intcode[loc_one] * intcode[loc_two]
+            execute(x+4)
+    else:
+        print("Location 0:",intcode[0])
+
+
 if __name__ == "__main__":
     readFile()
-    code[1] = 12
-    code[2] = 2
-    location = 0
+    intcode[1] = 12
+    intcode[2] = 2
     execute(0)
+    
